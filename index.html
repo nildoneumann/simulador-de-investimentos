@@ -25,6 +25,31 @@ body{
   color:#fff;
 }
 
+.header{
+  position:sticky;
+  top:0;
+  background:#020617;
+  padding:15px 20px;
+  z-index:999;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-bottom:1px solid rgba(255,255,255,0.08);
+}
+
+.logo{
+  font-size:18px;
+  font-weight:bold;
+  letter-spacing:1px;
+}
+
+.badge{
+  background:#1e293b;
+  padding:6px 12px;
+  border-radius:20px;
+  font-size:13px;
+}
+
 .container{
   max-width:1000px;
   margin:auto;
@@ -33,8 +58,9 @@ body{
 
 h1{
   text-align:center;
-  margin-bottom:20px;
-  margin-top:10px;
+  margin-bottom:10px;
+  margin-top:5px;
+  font-size:22px;
 }
 
 .grid{
@@ -53,10 +79,10 @@ h1{
 
 input, select{
   width:92%;
-  padding:10px;
-  margin-bottom:15px;
+  padding:8px;
+  margin-bottom:10px;
   border-radius:10px;
-  border:1px solid #ddd;
+  border:2px solid #ddd;
   font-size:15px;
   font-weight:bold;
   color:darkgreen;
@@ -87,7 +113,7 @@ button:hover{
 
 .resumo div{
   background:#1e293b;
-  padding:10px;
+  padding:8px;
   border-radius:12px;
   text-align:center;
   border:1px solid green;
@@ -108,12 +134,23 @@ button:hover{
     grid-template-columns:1fr;
   }
 }
+footer {
+  text-align: center;
+  padding: 8px 15px;
+  font-size: 12px;
+  opacity: 0.6;
+}
+
 </style>
 </head>
 <body>
+<div class="header">
+  <div class="logo">InvestPro</div>
+  <div class="badge">Simulador Profissional</div>
+</div>
 
 <div class="container">
-<h1>💰 Simulador Profissional de Investimentos</h1>
+<h1>💰 Simulador de Investimentos</h1>
 
 <div class="grid">
 <div class="card">
@@ -122,7 +159,7 @@ button:hover{
 <input type="number" id="capital" value="1000">
 
 <label>Aporte Mensal (R$)</label>
-<input type="number" id="aporte" value="250">
+<input type="number" id="aporte" value="500">
 
 <label>Taxa (%)</label>
 <input type="number" id="taxa" value="12">
@@ -146,11 +183,15 @@ button:hover{
 </div>
 
 <div class="resumo">
-<div>Valor Final<strong id="valorFinal"></strong></div>
-<div>Total Investido<strong id="totalInvestido"></strong></div>
-<div>Total em Juros<strong id="totalJuros"></strong></div>
+  <div>Valor Final<strong id="valorFinal"></strong></div>
+  <div>Total Investido<strong id="totalInvestido"></strong></div>
+  <div>Total em Juros<strong id="totalJuros"></strong></div>
+  <div>Crescimento<strong id="percentual"></strong></div>
 </div>
-<div class="card" style="margin-top:20px;">
+
+<label style="font-size: 8px; color:yellow">© 2026 Leonildo.Neumann</label>
+
+<div class="card" style="margin-top:10px;">
   <h3 style="margin-top:0;">📋 Tabela Mês a Mês</h3>
   <div style="overflow-x:auto;">
     <table id="tabela" style="width:100%; border-collapse:collapse; font-size:14px;">
@@ -166,7 +207,7 @@ button:hover{
     </table>
   </div>
 </div>
-
+<footer>© 2026 Leonildo.Neumann</footer>
 </div>
 
 <script>
@@ -236,6 +277,8 @@ for(let i=1;i<=meses;i++){
   tbody.innerHTML += linha;
 }
 
+/* Atualiza resumo */
+
 document.getElementById("valorFinal").innerHTML = 
   "R$ " + total.toLocaleString("pt-BR",{minimumFractionDigits:2});
 
@@ -244,6 +287,18 @@ document.getElementById("totalInvestido").innerHTML =
 
 document.getElementById("totalJuros").innerHTML = 
   "R$ " + totalJ.toLocaleString("pt-BR",{minimumFractionDigits:2});
+
+/* 📈 Percentual de crescimento */
+let crescimento = 0;
+
+if(totalInvest > 0){
+  crescimento = ((total - totalInvest) / totalInvest) * 100;
+}
+
+document.getElementById("percentual").innerHTML =
+  crescimento.toFixed(1) + "%";
+
+/* Atualiza gráfico */
 
 if(chart) chart.destroy();
 
@@ -292,8 +347,7 @@ chart = new Chart(document.getElementById("grafico"), {
   }
 });
 
-}
-calcular();
+}calcular();
 
 /* Registro PWA */
 if("serviceWorker" in navigator){
@@ -302,5 +356,5 @@ if("serviceWorker" in navigator){
 </script>
 
 </body>
-
 </html>
+
