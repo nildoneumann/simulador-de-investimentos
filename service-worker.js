@@ -1,4 +1,4 @@
-const CACHE = "investpro-v5";
+const CACHE = "investpro-v4";
 
 self.addEventListener("install", e => {
   e.waitUntil(
@@ -32,6 +32,7 @@ self.addEventListener("fetch", e => {
   );
 
 });
+
 
 
 
