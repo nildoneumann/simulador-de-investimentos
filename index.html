@@ -162,10 +162,11 @@ footer {
 <input type="number" id="aporte" value="500">
 
 <label>Taxa (%)</label>
-<input type="number" id="taxa" value="12">
+<input id="taxa" style="margin-bottom:1px" type="number" step="0.01" placeholder="Ex: 12" oninput="atualizarTaxaEquivalente()">
+<div id="taxaEquivalente" style="margin-top:1px; font-size:10px; opacity:0.8; color:darkgreen; font-weight:bold"></div>
 
 <label>Tipo de Taxa</label>
-<select id="tipoTaxa">
+<select id="tipoTaxa" onchange="atualizarTaxaEquivalente()">
 <option value="anual">Anual</option>
 <option value="mensal">Mensal</option>
 </select>
@@ -365,10 +366,47 @@ if ("serviceWorker" in navigator) {
 
   });
 }
+
+  function atualizarTaxaEquivalente(){
+
+let taxa = parseFloat(document.getElementById("taxa").value);
+let tipo = document.getElementById("tipoTaxa").value;
+
+if(!taxa){
+document.getElementById("taxaEquivalente").innerHTML="";
+return;
+}
+
+let taxaDecimal = taxa/100;
+let anual;
+let mensal;
+
+if(tipo === "mensal"){
+
+mensal = taxaDecimal;
+anual = Math.pow(1+mensal,12)-1;
+
+document.getElementById("taxaEquivalente").innerHTML =
+`Que dá <b>${(anual*100).toFixed(3).replace(".",",")}% ao ano</b>.`;
+
+}
+
+if(tipo === "anual"){
+
+anual = taxaDecimal;
+mensal = Math.pow(1+anual,1/12)-1;
+
+document.getElementById("taxaEquivalente").innerHTML =
+`Que dá <b>${(mensal*100).toFixed(3).replace(".",",")}% ao mês</b>.`;
+
+}
+
+}
 </script>
 
 </body>
 </html>
+
 
 
 
